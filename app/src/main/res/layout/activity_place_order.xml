@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlaceOrder">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/placeOrderTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="New Order"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="50dp"
+                android:textSize="30dp"/>
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Full Name"
+                app:layout_constraintTop_toBottomOf="@id/placeOrderTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp" />
+
+            <TextView
+                android:id="@+id/picklesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Num of Pickles"
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="50dp" />
+
+            <NumberPicker
+                android:id="@+id/picklesPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                app:layout_constraintStart_toEndOf="@+id/picklesLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                />
+
+            <TextView
+                android:id="@+id/hummusLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/picklesLabel"
+                android:text="Add Hummus"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="50dp"
+                />
+
+            <CheckBox
+                android:id="@+id/hummusCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/picklesPicker"
+                app:layout_constraintStart_toEndOf="@id/hummusLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tahiniLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/hummusLabel"
+                android:text="Add Tahini"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="50dp"
+                />
+
+            <CheckBox
+                android:id="@+id/tahiniCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/hummusCheckBox"
+                app:layout_constraintStart_toEndOf="@id/tahiniLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="30dp"
+                />
+
+            <TextView
+                android:id="@+id/commentLabel"
+                app:layout_constraintTop_toBottomOf="@+id/tahiniCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="50dp"
+                />
+
+            <EditText
+                android:id="@+id/commentContent"
+                app:layout_constraintTop_toBottomOf="@+id/commentLabel"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/commentContent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"
+                android:text="Place Order"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
