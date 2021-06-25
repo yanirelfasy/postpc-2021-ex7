@@ -5,17 +5,17 @@ import android.app.Application;
 import java.io.Serializable;
 
 public class SandwichApplication extends Application implements Serializable {
-    private LocalDataManager storageManager;
+    private DataManager dataManager;
 
-    public LocalDataManager getStorageManager(){
-        return storageManager;
+    public DataManager getDataManager(){
+        return dataManager;
     }
 
     @Override
     public void onCreate(){
         super.onCreate();
         instance = this;
-        storageManager = new LocalDataManager(this);
+        dataManager = new DataManager(this);
     }
     private static SandwichApplication instance = null;
 
