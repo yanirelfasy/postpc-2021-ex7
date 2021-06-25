@@ -1,5 +1,7 @@
 package exercise.android.sandwich
 
+import java.io.Serializable
+
 data class FirestoreOrder (
 	var firstName: String = "",
 	var numOfPickles: Int = 0,
@@ -8,4 +10,4 @@ data class FirestoreOrder (
 	var comment: String = "",
 	var status: Int = 0,
 	var orderID: String = ""
-)
+): Serializable

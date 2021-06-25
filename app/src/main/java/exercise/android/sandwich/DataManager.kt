@@ -43,10 +43,10 @@ class DataManager(val context : Context) : Serializable{
 		editor.apply()
 	}
 
-	fun addOrderToDB(orderDetails: FirestoreOrder, callBack: (Boolean, String?) -> Unit){
+	fun addOrderToDB(orderDetails: FirestoreOrder, callBack: (Boolean, FirestoreOrder?) -> Unit){
 		orderDetails.orderID = db.collection("orders").document().id
 		db.collection("orders").document(orderDetails.orderID).set(orderDetails).addOnSuccessListener {
-			callBack(true, orderDetails.orderID)
+			callBack(true, orderDetails)
 		}.addOnFailureListener {
 			callBack(false, null)
 		}.addOnCanceledListener {

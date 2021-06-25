@@ -1,5 +1,6 @@
 package exercise.android.sandwich
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -57,12 +58,15 @@ class PlaceOrder : AppCompatActivity() {
 		}
 	}
 
-	fun placeOrderHandler(isSuccess: Boolean, orderID: String?){
+	fun placeOrderHandler(isSuccess: Boolean, orderAdded: FirestoreOrder?){
 		if(isSuccess){
 			if(dataManager?.getFullName() != fullName){
 				dataManager?.setFullName(fullName)
 			}
-			dataManager?.setLastOrderID(orderID)
+			dataManager?.setLastOrderID(orderAdded?.orderID)
+			val intent = Intent(this, EditOrder::class.java)
+			intent.putExtra("orderDetails", orderAdded)
+			startActivity(intent)
 		}
 		else{
 			println("FAIL!!!!")
