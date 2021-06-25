@@ -8,7 +8,8 @@
         android:label="Sandwich"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplication">
+        android:theme="@style/Theme.MyApplication"
+        android:name=".SandwichApplication">
         <activity android:name=".EditOrder"></activity>
         <activity android:name=".PlaceOrder" />
         <activity android:name=".MainActivity">

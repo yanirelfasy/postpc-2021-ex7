@@ -78,7 +78,6 @@ public class PlaceOrder extends AppCompatActivity{
         addTahiniField.setOnCheckedChangeListener(((compoundButton, isChecked) -> addTahini = isChecked));
 
 
-
     }
 
     @Override
