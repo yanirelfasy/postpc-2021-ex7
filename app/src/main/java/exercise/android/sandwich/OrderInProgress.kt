@@ -29,13 +29,7 @@ class OrderInProgress : AppCompatActivity() {
 				deleteOrderHandler(true)
 			} else if (value.exists()) {
 				val newOrder: FirestoreOrder? = value.toObject(FirestoreOrder::class.java)
-				if (newOrder?.status == 2) {
-					val intent = Intent(this, OrderIsReady::class.java)
-					startActivity(intent)
-				}
-				else if(newOrder?.status == 0){
-					dataManager?.getOrderFromDB(dataManager?.getLastOrderID()!!, ::backToOrderEdit)
-				}
+				listenerHandler(newOrder)
 			}
 		}
 	}
@@ -55,6 +49,17 @@ class OrderInProgress : AppCompatActivity() {
 		val intent = Intent(this, EditOrder::class.java)
 		intent.putExtra("orderDetails", orderDetails)
 		startActivity(intent)
+	}
+
+	fun listenerHandler(newOrder: FirestoreOrder?){
+		if (newOrder?.status == 2) {
+			val intent = Intent(this, OrderIsReady::class.java)
+			this.finish()
+			startActivity(intent)
+		}
+		else if(newOrder?.status == 0){
+			dataManager?.getOrderFromDB(dataManager?.getLastOrderID()!!, ::backToOrderEdit)
+		}
 	}
 
 	override fun onDestroy() {

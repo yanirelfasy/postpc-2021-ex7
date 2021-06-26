@@ -22,6 +22,8 @@ class EditOrder : AppCompatActivity() {
 	private var orderID: String? = null
 	private var listener: ListenerRegistration? = null
 	private var orderDetails: FirestoreOrder? = null
+
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		supportActionBar!!.hide()
@@ -65,26 +67,7 @@ class EditOrder : AppCompatActivity() {
 			}
 			else if(value.exists()){
 				val newOrder: FirestoreOrder? = value.toObject(FirestoreOrder::class.java)
-				if(newOrder?.status == 1){
-					val intent = Intent(this, OrderInProgress::class.java)
-					startActivity(intent)
-				}
-				else{
-					fullName = newOrder?.fullName
-					numOfPickles = newOrder?.numOfPickles
-					addHummus = newOrder?.addHummus
-					addTahini = newOrder?.addTahini
-					comment = newOrder?.comment
-					status = "Waiting..."
-					orderID = newOrder?.orderID
-
-					fullNameField.setText(fullName)
-					numOfPicklesField.value = numOfPickles!!
-					addHummusField.isChecked = addHummus!!
-					addTahiniField.isChecked = addTahini!!
-					commentField.setText(comment)
-					statusField.text = status
-				}
+				listenerHandler(newOrder)
 			}
 
 		}
@@ -162,7 +145,10 @@ class EditOrder : AppCompatActivity() {
 		val addHummusField = findViewById<View>(R.id.hummusCheckBox) as CheckBox
 		val addTahiniField = findViewById<View>(R.id.tahiniCheckBox) as CheckBox
 		val commentField = findViewById<View>(R.id.commentContent) as EditText
+		val saveChanges = findViewById<View>(R.id.saveChangesBtn) as Button
+		val deleteBtn = findViewById<View>(R.id.deleteOrder) as Button
 		val statusField = findViewById<View>(R.id.orderStatus) as TextView
+
 		fullNameField.setText(fullName)
 		numOfPicklesField.value = numOfPickles!!
 		addHummusField.isChecked = addHummus!!
@@ -175,6 +161,39 @@ class EditOrder : AppCompatActivity() {
 		super.onDestroy()
 		if(listener != null){
 			listener?.remove()
+		}
+	}
+
+	fun listenerHandler(newOrder: FirestoreOrder?){
+		if(newOrder?.status == 1){
+			val intent = Intent(this, OrderInProgress::class.java)
+			this.finish()
+			startActivity(intent)
+		}
+		else{
+			fullName = newOrder?.fullName
+			numOfPickles = newOrder?.numOfPickles
+			addHummus = newOrder?.addHummus
+			addTahini = newOrder?.addTahini
+			comment = newOrder?.comment
+			status = "Waiting..."
+			orderID = newOrder?.orderID
+
+			val fullNameField = findViewById<View>(R.id.name) as EditText
+			val numOfPicklesField = findViewById<View>(R.id.picklesPicker) as NumberPicker
+			val addHummusField = findViewById<View>(R.id.hummusCheckBox) as CheckBox
+			val addTahiniField = findViewById<View>(R.id.tahiniCheckBox) as CheckBox
+			val commentField = findViewById<View>(R.id.commentContent) as EditText
+			val saveChanges = findViewById<View>(R.id.saveChangesBtn) as Button
+			val deleteBtn = findViewById<View>(R.id.deleteOrder) as Button
+			val statusField = findViewById<View>(R.id.orderStatus) as TextView
+
+			fullNameField.setText(fullName)
+			numOfPicklesField.value = numOfPickles!!
+			addHummusField.isChecked = addHummus!!
+			addTahiniField.isChecked = addTahini!!
+			commentField.setText(comment)
+			statusField.text = status
 		}
 	}
 }
