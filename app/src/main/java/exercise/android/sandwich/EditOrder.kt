@@ -7,26 +7,28 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 class EditOrder : AppCompatActivity() {
 
 	private var fullName: String? = null
-	private var numOfPickles = 0
-	private var addHummus = false
-	private var addTahini = false
+	private var numOfPickles: Int? = 0
+	private var addHummus: Boolean? = false
+	private var addTahini: Boolean? = false
 	private var comment: String? = null
 	private var dataManager: DataManager? = null
 	private var status: String? = null
 	private var orderID: String? = null
-
+	private var listener: ListenerRegistration? = null
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		supportActionBar!!.hide()
 		if (dataManager == null) {
 			dataManager = SandwichApplication.getInstance().dataManager
 		}
-		setContentView(R.layout.activity_edit_order)
 
+		setContentView(R.layout.activity_edit_order)
 		val fullNameField = findViewById<View>(R.id.name) as EditText
 		val numOfPicklesField = findViewById<View>(R.id.picklesPicker) as NumberPicker
 		val addHummusField = findViewById<View>(R.id.hummusCheckBox) as CheckBox
@@ -50,10 +52,45 @@ class EditOrder : AppCompatActivity() {
 		status = "Waiting..."
 		orderID = orderDetails.orderID
 
+		listener = FirebaseFirestore.getInstance().collection("orders").document(orderID!!).addSnapshotListener{ value, error ->
+			if(error != null){
+				Toast.makeText(this, "Failed to add listener", Toast.LENGTH_SHORT).show()
+			}
+			else if (value == null){
+				Toast.makeText(this, "Failed to add listener", Toast.LENGTH_SHORT).show()
+			}
+			else if (!value.exists()){
+				deleteOrderHandler(true)
+			}
+			else if(value.exists()){
+				val newOrder: FirestoreOrder? = value.toObject(FirestoreOrder::class.java)
+				if(newOrder?.status == 1){
+					// TODO: Move to in progress screen
+				}
+				else{
+					fullName = newOrder?.fullName
+					numOfPickles = newOrder?.numOfPickles
+					addHummus = newOrder?.addHummus
+					addTahini = newOrder?.addTahini
+					comment = newOrder?.comment
+					status = "Waiting..."
+					orderID = newOrder?.orderID
+
+					fullNameField.setText(fullName)
+					numOfPicklesField.value = numOfPickles!!
+					addHummusField.isChecked = addHummus!!
+					addTahiniField.isChecked = addTahini!!
+					commentField.setText(comment)
+					statusField.text = status
+				}
+			}
+
+		}
+
 		fullNameField.setText(fullName)
-		numOfPicklesField.value = numOfPickles
-		addHummusField.isChecked = addHummus
-		addTahiniField.isChecked = addTahini
+		numOfPicklesField.value = numOfPickles!!
+		addHummusField.isChecked = addHummus!!
+		addTahiniField.isChecked = addTahini!!
 		commentField.setText(comment)
 		statusField.text = status
 
@@ -76,7 +113,7 @@ class EditOrder : AppCompatActivity() {
 		addTahiniField.setOnCheckedChangeListener { compoundButton, isChecked -> addTahini = isChecked }
 
 		saveChanges.setOnClickListener { v ->
-			val editedMessage = FirestoreOrder(fullName!!, numOfPickles, addHummus, addTahini, comment!!, 0, orderID!!)
+			val editedMessage = FirestoreOrder(fullName!!, numOfPickles!!, addHummus!!, addTahini!!, comment!!, 0, orderID!!)
 			dataManager?.editOrderFromDB(orderID!!, editedMessage, ::editMessageHandler)
 		}
 
@@ -103,9 +140,9 @@ class EditOrder : AppCompatActivity() {
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
 		outState.putString("fullName", fullName)
-		outState.putInt("numOfPickles", numOfPickles)
-		outState.putBoolean("addHummus", addHummus)
-		outState.putBoolean("addTahini", addTahini)
+		outState.putInt("numOfPickles", numOfPickles!!)
+		outState.putBoolean("addHummus", addHummus!!)
+		outState.putBoolean("addTahini", addTahini!!)
 		outState.putString("comment", comment)
 		outState.putString("status", status)
 	}
@@ -125,10 +162,17 @@ class EditOrder : AppCompatActivity() {
 		val commentField = findViewById<View>(R.id.commentContent) as EditText
 		val statusField = findViewById<View>(R.id.orderStatus) as TextView
 		fullNameField.setText(fullName)
-		numOfPicklesField.value = numOfPickles
-		addHummusField.isChecked = addHummus
-		addTahiniField.isChecked = addTahini
+		numOfPicklesField.value = numOfPickles!!
+		addHummusField.isChecked = addHummus!!
+		addTahiniField.isChecked = addTahini!!
 		commentField.setText(comment)
 		statusField.text = status
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		if(listener != null){
+			listener?.remove()
+		}
 	}
 }

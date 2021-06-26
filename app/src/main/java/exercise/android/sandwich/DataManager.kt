@@ -80,5 +80,4 @@ class DataManager(val context : Context) : Serializable{
 			callBack(false)
 		}
 	}
-	// TODO: ADD DELETE ORDER FROM DB
 }
