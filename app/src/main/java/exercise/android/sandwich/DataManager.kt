@@ -2,6 +2,8 @@ package exercise.android.sandwich
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.widget.Toast
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.io.Serializable
@@ -53,4 +55,30 @@ class DataManager(val context : Context) : Serializable{
 			callBack(false, null)
 		}
 	}
+
+	fun getOrderFromDB(orderID: String, callBack: (FirestoreOrder?) -> Unit){
+		db.collection("orders").document(orderID).get().addOnSuccessListener { result: DocumentSnapshot ->
+			val orderDetails = result.toObject(FirestoreOrder::class.java)
+			callBack(orderDetails)
+		}.addOnFailureListener {
+			callBack(null)
+		}
+	}
+
+	fun editOrderFromDB(orderID: String, editedOrder: FirestoreOrder, callBack: (String) -> Unit){
+		db.collection("orders").document(orderID).set(editedOrder).addOnSuccessListener {
+			callBack("Edited Successfully")
+		}.addOnFailureListener {
+			callBack("Failed to Edit")
+		}
+	}
+
+	fun deleteOrderFromDB(orderID: String, callBack: (Boolean) -> Unit){
+		db.collection("orders").document(orderID).delete().addOnSuccessListener {
+			callBack(true)
+		}.addOnFailureListener {
+			callBack(false)
+		}
+	}
+	// TODO: ADD DELETE ORDER FROM DB
 }

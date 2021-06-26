@@ -17,11 +17,24 @@ class MainActivity : AppCompatActivity() {
 		}
 
 		setContentView(R.layout.activity_main)
-		if(dataManager?.getLastOrderID() == null){
+		val lastOrderID: String? = dataManager?.getLastOrderID()
+		if(lastOrderID == null){
 			val intent = Intent(this, PlaceOrder::class.java)
 			startActivity(intent)
 		}
+		else{
+			dataManager?.getOrderFromDB(lastOrderID, ::setOrderDetails)
+		}
 
 
+	}
+
+
+	fun setOrderDetails(orderToSet :FirestoreOrder?){
+		if(orderToSet != null){
+			val intent = Intent(this, EditOrder::class.java)
+			intent.putExtra("orderDetails", orderToSet)
+			startActivity(intent)
+		}
 	}
 }
