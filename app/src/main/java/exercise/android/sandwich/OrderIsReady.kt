@@ -3,22 +3,22 @@ package exercise.android.sandwich
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import exercise.android.sandwich.R
 
-class OrderInProgress : AppCompatActivity() {
+class OrderIsReady : AppCompatActivity() {
 	private var listener: ListenerRegistration? = null
 	private var dataManager: DataManager? = null
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		supportActionBar!!.hide()
 		if (dataManager == null) {
 			dataManager = SandwichApplication.getInstance().dataManager
 		}
-		setContentView(R.layout.activity_order_in_progress)
+		setContentView(R.layout.activity_order_is_ready)
 
 		listener = FirebaseFirestore.getInstance().collection("orders").document(dataManager?.getLastOrderID()!!).addSnapshotListener { value, error ->
 			if (error != null) {
@@ -29,14 +29,21 @@ class OrderInProgress : AppCompatActivity() {
 				deleteOrderHandler(true)
 			} else if (value.exists()) {
 				val newOrder: FirestoreOrder? = value.toObject(FirestoreOrder::class.java)
-				if (newOrder?.status == 2) {
-					val intent = Intent(this, OrderIsReady::class.java)
-					startActivity(intent)
+				if (newOrder?.status == 1) {
+					backToInProgress()
 				}
 				else if(newOrder?.status == 0){
 					dataManager?.getOrderFromDB(dataManager?.getLastOrderID()!!, ::backToOrderEdit)
 				}
+				else if(newOrder?.status == 3){
+					dataManager?.deleteOrderFromDB(dataManager?.getLastOrderID()!!, ::deleteOrderHandler)
+				}
 			}
+		}
+
+		val gotOrderBtn = findViewById<View>(R.id.gotOrder) as Button
+		gotOrderBtn.setOnClickListener {
+			dataManager?.changeOrderStatus(dataManager?.getLastOrderID()!!, 3)
 		}
 	}
 
@@ -54,6 +61,11 @@ class OrderInProgress : AppCompatActivity() {
 	fun backToOrderEdit(orderDetails: FirestoreOrder?){
 		val intent = Intent(this, EditOrder::class.java)
 		intent.putExtra("orderDetails", orderDetails)
+		startActivity(intent)
+	}
+
+	fun backToInProgress(){
+		val intent = Intent(this, OrderInProgress::class.java)
 		startActivity(intent)
 	}
 

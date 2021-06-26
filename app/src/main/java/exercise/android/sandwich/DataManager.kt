@@ -9,8 +9,8 @@ import com.google.firebase.ktx.Firebase
 import java.io.Serializable
 
 class DataManager(val context : Context) : Serializable{
-	private var _fullName: String? = null
-	private var _lastOrderID: String? = null
+	private var _fullName: String = ""
+	private var _lastOrderID: String = ""
 	private val sp : SharedPreferences = context.getSharedPreferences("sandwitch_local", Context.MODE_PRIVATE)
 	private val db = Firebase.firestore
 
@@ -19,26 +19,26 @@ class DataManager(val context : Context) : Serializable{
 	}
 
 	private fun initializeFromSP() {
-		this._fullName = sp.getString("firstName", null)
-		this._lastOrderID = sp.getString("lastOrderID", null)
+		this._fullName = sp.getString("firstName", "")!!
+		this._lastOrderID = sp.getString("lastOrderID", "")!!
 	}
 
-	fun getFullName() : String? {
+	fun getFullName() : String {
 		return this._fullName
 	}
 
-	fun getLastOrderID(): String? {
+	fun getLastOrderID(): String {
 		return this._lastOrderID;
 	}
 
-	fun setFullName(fullName: String?){
+	fun setFullName(fullName: String){
 		this._fullName = fullName
 		val editor : SharedPreferences.Editor = sp.edit()
 		editor.putString("firstName", fullName)
 		editor.apply()
 	}
 
-	fun setLastOrderID(lastOrderID: String?){
+	fun setLastOrderID(lastOrderID: String){
 		this._lastOrderID = lastOrderID
 		val editor : SharedPreferences.Editor = sp.edit()
 		editor.putString("lastOrderID", lastOrderID)
@@ -79,5 +79,9 @@ class DataManager(val context : Context) : Serializable{
 		}.addOnFailureListener {
 			callBack(false)
 		}
+	}
+
+	fun changeOrderStatus(orderID: String, status: Int){
+		db.collection("orders").document(orderID).update("status", status)
 	}
 }

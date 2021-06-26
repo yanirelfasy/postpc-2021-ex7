@@ -21,6 +21,7 @@ class EditOrder : AppCompatActivity() {
 	private var status: String? = null
 	private var orderID: String? = null
 	private var listener: ListenerRegistration? = null
+	private var orderDetails: FirestoreOrder? = null
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		supportActionBar!!.hide()
@@ -42,15 +43,15 @@ class EditOrder : AppCompatActivity() {
 		numOfPicklesField.maxValue = 10
 
 		val recIntent = intent
-		val orderDetails: FirestoreOrder = recIntent.getSerializableExtra("orderDetails") as FirestoreOrder
+		orderDetails = recIntent.getSerializableExtra("orderDetails") as FirestoreOrder
 
-		fullName = orderDetails.fullName
-		numOfPickles = orderDetails.numOfPickles
-		addHummus = orderDetails.addHummus
-		addTahini = orderDetails.addTahini
-		comment = orderDetails.comment
+		fullName = orderDetails?.fullName
+		numOfPickles = orderDetails?.numOfPickles
+		addHummus = orderDetails?.addHummus
+		addTahini = orderDetails?.addTahini
+		comment = orderDetails?.comment
 		status = "Waiting..."
-		orderID = orderDetails.orderID
+		orderID = orderDetails?.orderID
 
 		listener = FirebaseFirestore.getInstance().collection("orders").document(orderID!!).addSnapshotListener{ value, error ->
 			if(error != null){
@@ -129,7 +130,7 @@ class EditOrder : AppCompatActivity() {
 
 	fun deleteOrderHandler(response: Boolean){
 		if(response){
-			dataManager?.setLastOrderID(null)
+			dataManager?.setLastOrderID("")
 			val intent = Intent(this, PlaceOrder::class.java)
 			startActivity(intent)
 		}

@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".OrderInProgress"></activity>
+        <activity android:name=".OrderIsReady"></activity>
+        <activity android:name=".OrderInProgress" />
         <activity android:name=".EditOrder" />
         <activity android:name=".PlaceOrder" />
         <activity android:name=".MainActivity">

@@ -9,11 +9,11 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
 class PlaceOrder : AppCompatActivity() {
-	private var fullName: String? = null
+	private var fullName: String = ""
 	private var numOfPickles = 0
 	private var addHummus = false
 	private var addTahini = false
-	private var comment: String? = null
+	private var comment: String = ""
 	private var dataManager: DataManager? = null
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -22,7 +22,7 @@ class PlaceOrder : AppCompatActivity() {
 			dataManager = SandwichApplication.getInstance().dataManager
 		}
 		setContentView(R.layout.activity_place_order)
-		fullName = dataManager?.getFullName()
+		fullName = dataManager?.getFullName()!!
 		val fullNameField = findViewById<View>(R.id.name) as EditText
 		fullNameField.setText(fullName)
 		val numOfPicklesField = findViewById<View>(R.id.picklesPicker) as NumberPicker
@@ -63,7 +63,7 @@ class PlaceOrder : AppCompatActivity() {
 			if(dataManager?.getFullName() != fullName){
 				dataManager?.setFullName(fullName)
 			}
-			dataManager?.setLastOrderID(orderAdded?.orderID)
+			dataManager?.setLastOrderID(orderAdded?.orderID!!)
 			val intent = Intent(this, EditOrder::class.java)
 			intent.putExtra("orderDetails", orderAdded)
 			startActivity(intent)
@@ -84,11 +84,11 @@ class PlaceOrder : AppCompatActivity() {
 
 	override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 		super.onRestoreInstanceState(savedInstanceState)
-		fullName = savedInstanceState.getString("fullName")
+		fullName = savedInstanceState.getString("fullName")!!
 		numOfPickles = savedInstanceState.getInt("numOfPickles")
 		addHummus = savedInstanceState.getBoolean("addHummus")
 		addTahini = savedInstanceState.getBoolean("addTahini")
-		comment = savedInstanceState.getString("comment")
+		comment = savedInstanceState.getString("comment")!!
 		val fullNameField = findViewById<View>(R.id.name) as EditText
 		val numOfPicklesField = findViewById<View>(R.id.picklesPicker) as NumberPicker
 		val addHummusField = findViewById<View>(R.id.hummusCheckBox) as CheckBox
