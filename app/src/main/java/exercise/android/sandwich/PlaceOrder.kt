@@ -71,7 +71,6 @@ class PlaceOrder : AppCompatActivity() {
 		else{
 			println("FAIL!!!!")
 		}
-
 	}
 
 	override fun onSaveInstanceState(outState: Bundle) {

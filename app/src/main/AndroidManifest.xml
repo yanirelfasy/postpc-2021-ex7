@@ -3,14 +3,15 @@
     package="exercise.android.sandwich">
 
     <application
+        android:name=".SandwichApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="Sandwich"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplication"
-        android:name=".SandwichApplication">
-        <activity android:name=".EditOrder"></activity>
+        android:theme="@style/Theme.MyApplication">
+        <activity android:name=".OrderInProgress"></activity>
+        <activity android:name=".EditOrder" />
         <activity android:name=".PlaceOrder" />
         <activity android:name=".MainActivity">
             <intent-filter>

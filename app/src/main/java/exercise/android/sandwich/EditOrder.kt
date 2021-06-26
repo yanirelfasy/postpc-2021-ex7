@@ -65,7 +65,8 @@ class EditOrder : AppCompatActivity() {
 			else if(value.exists()){
 				val newOrder: FirestoreOrder? = value.toObject(FirestoreOrder::class.java)
 				if(newOrder?.status == 1){
-					// TODO: Move to in progress screen
+					val intent = Intent(this, OrderInProgress::class.java)
+					startActivity(intent)
 				}
 				else{
 					fullName = newOrder?.fullName
